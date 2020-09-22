@@ -3,7 +3,6 @@ import App from './App.vue';
 import router from './router';
 
 window.axios = require('axios');
-axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 
 Vue.config.productionTip = false
 

@@ -10,16 +10,13 @@ export default {
   props: {
     msg: String
   },
-  mounted(){
-    axios.get( this.$API_URL, {
-
-    } )
-    .then( response => {
-      console.log(response);
-    })
-    .catch( error => {
-      console.log(error);
-    });
+  mounted() {
+    axios.get(`${this.$API_URL}/get_form.php`)
+      .then(function (response) {
+        console.log(response.data)
+      }).catch(error => {
+        console.log(error)
+      });
   }
 }
 </script>
