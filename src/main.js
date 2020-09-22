@@ -1,8 +1,13 @@
-import Vue from 'vue'
-import App from './App.vue'
-import router from './router'
+import Vue from 'vue';
+import App from './App.vue';
+import router from './router';
+
+window.axios = require('axios');
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 
 Vue.config.productionTip = false
+
+Vue.prototype.$API_URL = "http://localhost/api";
 
 new Vue({
   router,
