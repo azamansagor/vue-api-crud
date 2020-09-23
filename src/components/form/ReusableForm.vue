@@ -21,11 +21,11 @@
 </template>
 
 <script>
-import FormComponents from '@/components/form/fields/index';
+import FormFields from '@/components/form/fields/index';
 
 export default {
   name: "ReusableForm",
-  components: { ...FormComponents },
+  components: { ...FormFields },
   props: ["schema", "value", "fields"],
   data() {
     return {
