@@ -1,7 +1,6 @@
 <template>
   <div class="add">
     <h1>This is a add page</h1>
-    <h3 v-if="loading">Loading</h3>
     <ReusableForm
       :schema="schema"
       v-model="formData"
@@ -19,7 +18,6 @@ export default {
   components: {ReusableForm, Form },
   data() {
     return {
-      loading: true,
       formData: {
         firstName: "Evan"
       },
@@ -38,12 +36,6 @@ export default {
           name: "firstName"
         },
         {
-          type: "text",
-          placeholder: "Last Name",
-          label: "Last Name",
-          name: "lastName"
-        },
-        {
           type: "number",
           placeholder: "Age",
           name: "age",
@@ -59,10 +51,6 @@ export default {
       axios.get(`${this.$API_URL}/get_form.php`)
           .then( response =>  {
             this.fields = response.data.data.fields[0];
-
-            setTimeout( () => {
-              this.loading = false;
-            }, 5000)
           }).catch(error => {
             console.log(error)
           }
@@ -70,7 +58,7 @@ export default {
     }
   },
   created(){
-    this.getFormData();
+    this.getFormData()
   }
 };
 </script>

@@ -5,8 +5,7 @@
             :value="value"
             @input="$emit('input',
            $event.target.value)">
-      <option v-for="option in options"
-              :key="option">
+      <option v-for="option in options">
         {{option}}
       </option>
     </select>

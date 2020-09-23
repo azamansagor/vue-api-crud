@@ -9,6 +9,6 @@ Vue.config.productionTip = false
 Vue.prototype.$API_URL = "http://localhost/api";
 
 new Vue({
-  router,
-  render: h => h(App)
+  render: h => h(App),
+  router
 }).$mount('#app')
