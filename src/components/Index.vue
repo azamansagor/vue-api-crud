@@ -1,6 +1,7 @@
 <template>
   <div>
-    <h1 v-if="!loading">{{ msg }}</h1>
+    <h1>{{ msg }}</h1>
+    <h3 v-if="loading">Loading</h3>
     <table>
       <tr v-bind:key="header.index" v-for="header in headers">
         <th v-bind:key="column.index" v-for="column in header">{{ column.title }}</th>
