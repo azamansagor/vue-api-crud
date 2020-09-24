@@ -4,14 +4,42 @@
     <h3 v-if="loading">Loading</h3>
     <table class="table table-bordered">
       <thead>
-        <tr v-bind:key="header.index" v-for="header in headers">
-          <th v-bind:key="column.index" v-for="column in header">{{ column.title }}</th>
+        <tr
+            v-bind:key="header.index"
+            v-for="header in headers"
+        >
+          <th
+              v-bind:key="column.index"
+              v-for="(column , key) in header"
+              @click="column.sortable ? sort(key): null "
+          >
+            {{ column.title }}
+
+            <span v-if="column.sortable">
+              <img v-if="(key===currentSort && currentSortDir == 'asc')" src="../assets/images/up.svg" height="16px">
+              <img v-else src="../assets/images/down.svg" height="16px">
+            </span>
+          </th>
         </tr>
       </thead>
 
-      <draggable :list="rows" tag="tbody" ghost-class="ghost" @change="afterDrag">
-        <tr :key="row.index" v-for="row in rows" class="table-row">
-          <td :key="single.index" v-for="single in result(row) ">{{ single }}</td>
+      <draggable
+          :list="rows"
+          tag="tbody"
+          ghost-class="ghost"
+          @change="afterDrag"
+      >
+        <tr
+            :key="row.index"
+            v-for="row in sortedRows"
+            class="table-row"
+        >
+          <td
+              :key="single.index"
+              v-for="single in result(row)"
+          >
+            {{ single }}
+          </td>
         </tr>
       </draggable>
 
@@ -41,9 +69,22 @@ export default {
       headers: [{}],
       rows: [{}],
       loading: true,
+
+      //sorting
+      currentSort: 'id',
+      currentSortDir: 'asc'
     }
   },
   methods: {
+    //sort data by column key
+    sort(key){
+      if(key === this.currentSort) {
+        this.currentSortDir = this.currentSortDir === 'asc' ? 'desc' : 'asc';
+      }
+      this.currentSort = key;
+    },
+
+    //send data to server after drag
     afterDrag(){
       axios.post(
           `${this.$API_URL}/reorder.php`,
@@ -60,6 +101,8 @@ export default {
           }
       );
     },
+
+    //match data with column
     result(row) {
       let newRow = {};
       let rowKeys = Object.keys(row);
@@ -78,6 +121,8 @@ export default {
       });
       return newRow;
     },
+
+    //get data list from api
     getList(){
       axios.get(`${this.$API_URL}/list.php`)
           .then( response =>  {
@@ -95,6 +140,17 @@ export default {
     this.rows = [{}];
     this.headers = [{}];
     this.getList();
+  },
+  computed: {
+    sortedRows:function() {
+      return this.rows.sort((a,b) => {
+        let modifier = 1;
+        if(this.currentSortDir === 'desc') modifier = -1;
+        if(a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
+        if(a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
+        return 0;
+      });
+    },
   }
 }
 </script>
