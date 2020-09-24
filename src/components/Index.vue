@@ -5,16 +5,12 @@
     <table class="table table-bordered">
       <thead>
         <tr v-bind:key="header.index" v-for="header in headers">
-          <th></th>
           <th v-bind:key="column.index" v-for="column in header">{{ column.title }}</th>
         </tr>
       </thead>
 
-      <draggable :list="rows" tag="tbody" @dragstart="onDragStart">
+      <draggable :list="rows" tag="tbody" ghost-class="ghost">
         <tr :key="row.index" v-for="row in rows" class="table-row">
-          <td>
-            <img alt="Drag Image" src="../assets/drag.svg" height="20px;">
-          </td>
           <td :key="single.index" v-for="single in result(row) ">{{ single }}</td>
         </tr>
       </draggable>
@@ -48,10 +44,6 @@ export default {
     }
   },
   methods: {
-    onDragStart(event){
-      event.style.backgroundColor = "blue";
-      console.log(event);
-    },
     result(row) {
       let newRow = {};
       let rowKeys = Object.keys(row);
@@ -95,5 +87,10 @@ export default {
 <style scoped>
 .table-row:hover{
   background: #e4e4e4;
+  cursor: move;
+}
+.ghost {
+  opacity: 0.5;
+  background: #c8ebfb;
 }
 </style>
