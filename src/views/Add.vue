@@ -1,5 +1,5 @@
 <template>
-  <div class="add">
+  <div class="w-100">
     <h1>This is a add page</h1>
     <ReusableForm
       :schema="schema"
