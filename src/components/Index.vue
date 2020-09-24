@@ -9,7 +9,7 @@
         </tr>
       </thead>
 
-      <draggable :list="rows" tag="tbody" ghost-class="ghost">
+      <draggable :list="rows" tag="tbody" ghost-class="ghost" @change="afterDrag">
         <tr :key="row.index" v-for="row in rows" class="table-row">
           <td :key="single.index" v-for="single in result(row) ">{{ single }}</td>
         </tr>
@@ -44,6 +44,22 @@ export default {
     }
   },
   methods: {
+    afterDrag(){
+      axios.post(
+          `${this.$API_URL}/reorder.php`,
+          { headers: this.headers, rows: this.rows},
+          {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            },
+          })
+          .then( response =>  {
+            console.log(response);
+          }).catch(error => {
+            console.log(error)
+          }
+      );
+    },
     result(row) {
       let newRow = {};
       let rowKeys = Object.keys(row);
