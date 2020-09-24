@@ -14,15 +14,17 @@
               @click="column.sortable ? sort(key): null "
           >
             {{ column.title }}
-
+            <!-- show sortable icon if allowed -->
             <span v-if="column.sortable">
-              <img v-if="(key===currentSort && currentSortDir == 'asc')" src="../assets/images/up.svg" height="16px">
-              <img v-else src="../assets/images/down.svg" height="16px">
+              <!-- conditional sort up/down icons -->
+              <img v-if="(key===currentSort && currentSortDir == 'asc')" src="../assets/images/up.svg" height="15px">
+              <img v-else src="../assets/images/down.svg" height="15px">
             </span>
           </th>
         </tr>
       </thead>
 
+      <!-- table rows -->
       <draggable
           :list="rows"
           tag="tbody"
@@ -31,23 +33,17 @@
       >
         <tr
             :key="row.index"
-            v-for="row in sortedRows"
+            v-for="row in rows"
             class="table-row"
         >
           <td
               :key="single.index"
-              v-for="single in result(row)"
+              v-for="single in formattedRows(row)"
           >
             {{ single }}
           </td>
         </tr>
       </draggable>
-
-      <!--
-      <tr v-bind:key="row.index" v-for="row in rows">
-        <td v-bind:key="single.index" v-for="single in result(row) ">{{ single }}</td>
-      </tr>
-      -->
     </table>
 
   </div>
@@ -66,22 +62,66 @@ export default {
   },
   data(){
     return{
-      headers: [{}],
-      rows: [{}],
+      //preloader
       loading: true,
 
-      //sorting
+      //api data
+      headers: [{}],
+      rows: [{}],
+
+      //sorting properties
       currentSort: 'id',
       currentSortDir: 'asc'
     }
   },
   methods: {
+    //get data list from api
+    getList(){
+      axios.get(`${this.$API_URL}/list.php`)
+          .then( response =>  {
+            this.headers = response.data.data.headers;
+            this.rows = response.data.data.rows;
+            this.loading = false;
+          }).catch(error => {
+            console.log(error)
+          }
+      );
+    },
+
+    //match data with column key
+    formattedRows(row) {
+      let newRow = {};
+      let rowKeys = Object.keys(row);
+      let headerKeys = Object.keys(this.headers[0]);
+
+      headerKeys.forEach(header => {
+        rowKeys.forEach(singleRow => {
+          if (row.hasOwnProperty(header)) {
+            if (header === singleRow) {
+              newRow[header] = row[singleRow];
+            }
+          } else {
+            newRow[header] = "";
+          }
+        });
+      });
+      return newRow;
+    },
+
     //sort data by column key
     sort(key){
       if(key === this.currentSort) {
         this.currentSortDir = this.currentSortDir === 'asc' ? 'desc' : 'asc';
       }
       this.currentSort = key;
+
+      this.rows.sort((a,b) => {
+        let modifier = 1;
+        if(this.currentSortDir === 'desc') modifier = -1;
+        if(a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
+        if(a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
+        return 0;
+      });
     },
 
     //send data to server after drag
@@ -101,39 +141,6 @@ export default {
           }
       );
     },
-
-    //match data with column
-    result(row) {
-      let newRow = {};
-      let rowKeys = Object.keys(row);
-      let headerKeys = Object.keys(this.headers[0]);
-
-      headerKeys.forEach(header => {
-        rowKeys.forEach(singleRow => {
-          if (row.hasOwnProperty(header)) {
-            if (header === singleRow) {
-              newRow[header] = row[singleRow];
-            }
-          } else {
-            newRow[header] = "";
-          }
-        });
-      });
-      return newRow;
-    },
-
-    //get data list from api
-    getList(){
-      axios.get(`${this.$API_URL}/list.php`)
-          .then( response =>  {
-            this.headers = response.data.data.headers;
-            this.rows = response.data.data.rows;
-            this.loading = false;
-          }).catch(error => {
-            console.log(error)
-          }
-      );
-    }
   },
 
   created() {
@@ -141,17 +148,6 @@ export default {
     this.headers = [{}];
     this.getList();
   },
-  computed: {
-    sortedRows:function() {
-      return this.rows.sort((a,b) => {
-        let modifier = 1;
-        if(this.currentSortDir === 'desc') modifier = -1;
-        if(a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
-        if(a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
-        return 0;
-      });
-    },
-  }
 }
 </script>
 
