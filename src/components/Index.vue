@@ -2,14 +2,16 @@
   <div>
     <h1>{{ msg }}</h1>
     <h3 v-if="loading">Loading</h3>
+
+    <input type="text" v-model="searchText" placeholder="Search Here">
     <table class="table table-bordered">
       <thead>
         <tr
-            v-bind:key="header.index"
+            :key="header.index"
             v-for="header in headers"
         >
           <th
-              v-bind:key="column.index"
+              :key="column.index"
               v-for="(column , key) in header"
               @click="column.sortable ? sort(key): null "
           >
@@ -26,14 +28,14 @@
 
       <!-- table rows -->
       <draggable
-          :list="rows"
+          :list="filteredRows"
           tag="tbody"
           ghost-class="ghost"
           @change="afterDrag"
       >
         <tr
             :key="row.index"
-            v-for="row in rows"
+            v-for="row in filteredRows"
             class="table-row"
         >
           <td
@@ -66,12 +68,15 @@ export default {
       loading: true,
 
       //api data
-      headers: [{}],
-      rows: [{}],
+      headers: [],
+      rows: [],
 
       //sorting properties
       currentSort: 'id',
-      currentSortDir: 'asc'
+      currentSortDir: 'asc',
+
+      //search variables
+      searchText : ''
     }
   },
   methods: {
@@ -115,7 +120,7 @@ export default {
       }
       this.currentSort = key;
 
-      this.rows.sort((a,b) => {
+      this.filteredRows.sort((a,b) => {
         let modifier = 1;
         if(this.currentSortDir === 'desc') modifier = -1;
         if(a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
@@ -144,10 +149,61 @@ export default {
   },
 
   created() {
-    this.rows = [{}];
-    this.headers = [{}];
+    this.rows = [];
+    this.headers = [];
     this.getList();
   },
+  computed:{
+    filteredRows: function(){
+      let filteredRowData = [];
+      if(this.searchText == ""){
+        filteredRowData = this.rows;
+      }else{
+        this.rows.map( (row)=> {
+          Object.keys(row).map( (key) => {
+            this.headers.map( (header) => {
+              Object.keys(header).map( (single) => {
+                // console.log(single);
+                // console.log(header[single].searchable);
+                if(key===single && header[single].searchable){
+                  // console.log(row[key]);
+                  if(row[key].toString().toLowerCase().match(this.searchText.toLowerCase().toLowerCase())){
+                    filteredRowData.push(row);
+                  }
+                }
+              });
+            });
+            // console.log(key);
+            // if(key.toString().toLowerCase().match(this.searchText.toLowerCase().toLowerCase())){
+            //   filteredRowData.push(row);
+            // }
+
+          });
+        });
+
+      }
+
+      return filteredRowData;
+      // return this.rows.filter( (row) => {
+      //   if(this.searchText == ""){
+      //     return row;
+      //   }else{
+      //     // return  Object.values(row).filter( (single ) => {
+      //     //   console.log(single);
+      //     //   return single.toString().toLowerCase().match(this.searchText.toString().toLowerCase());
+      //     // } );
+      //     Object.keys(row).filter( (key) => {
+      //       // console.log(key);
+      //       console.log(row);
+      //       return row[key].toString().toLowerCase().match(this.searchText.toLowerCase().toLowerCase());
+      //     });
+      //
+      //     // return row.name.toLowerCase().match(this.searchText.toLowerCase());
+      //   }
+      //
+      // });
+    }
+  }
 }
 </script>
 
