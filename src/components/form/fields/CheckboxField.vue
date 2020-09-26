@@ -7,7 +7,7 @@
         <div class="form-check" :id="name">
           <input
               class="form-check-input"
-              type="radio"
+              type="checkbox"
               :id="option.key"
               :placeholder="title"
               :required="required"
@@ -33,7 +33,7 @@
 <script>
 
 export default {
-  name: 'RadioField',
+  name: 'CheckboxField',
   data(){
     return {
       inputValue : this.default,

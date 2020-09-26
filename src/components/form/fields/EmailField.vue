@@ -1,19 +1,35 @@
 <template>
-  <div>
-    <label>{{label}}</label>
+  <div class="form-group">
+    <label :for="name">{{title}}</label>
 
-    <input type="email"
-           :name="name"
-           :value="value"
-           @input="$emit('input',$event.target.value)"
-           :placeholder="placeholder
-           ">
+    <ValidationProvider :rules="validate" v-slot="{ errors }">
+      <input type="email"
+             :id="name"
+             class="form-control"
+             :placeholder="title"
+             :required="required"
+             :name="name"
+             v-model="inputValue"
+             @input="$emit('input',inputValue)"
+             v-bind="html_attr"
+      >
 
+      <span v-for="error in errors">{{ errors[0] }}</span>
+    </ValidationProvider>
   </div>
 </template>
+
 <script>
+
 export default {
   name: 'EmailField',
-  props: ['placeholder', 'label', 'name', 'value']
+  data(){
+    return {
+      inputValue : this.value
+    }
+  },
+  props: [
+    'name', 'title', 'type', 'required', 'value', 'validate', 'html_attr'
+  ],
 }
 </script>

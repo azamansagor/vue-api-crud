@@ -5,7 +5,7 @@ import HiddenField from "./HiddenField";
 import TextareaField from "./TextareaField";
 import RadioField from "./RadioField";
 import EmailField from "./EmailField";
-import RepeaterField from "./RepeaterField";
+import CheckboxField from "./CheckboxField";
 
 export default {
     TextField,
@@ -15,5 +15,5 @@ export default {
     TextareaField,
     RadioField,
     EmailField,
-    RepeaterField
+    CheckboxField
 }

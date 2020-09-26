@@ -3,7 +3,7 @@
     <h1>{{ msg }}</h1>
     <h3 v-if="loading">Loading</h3>
 
-    <input type="text" v-model="searchText" placeholder="Search Here">
+    <input type="text" class="form-control mb-2" v-model="searchText" placeholder="Search Here">
     <table class="table table-bordered">
       <thead>
         <tr
@@ -15,9 +15,9 @@
               v-for="(column , key) in header"
               @click="column.sortable ? sort(key): null "
           >
-            {{ column.title }}
+            {{ column.title }} - {{ column.hidden}}
             <!-- show sortable icon if allowed -->
-            <span v-if="column.sortable">
+            <span>
               <!-- conditional sort up/down icons -->
               <img v-if="(key===currentSort && currentSortDir == 'asc')" src="../assets/images/up.svg" height="15px">
               <img v-else src="../assets/images/down.svg" height="15px">
@@ -70,6 +70,7 @@ export default {
       //api data
       headers: [],
       rows: [],
+      formattedHeaders: [],
 
       //sorting properties
       currentSort: 'id',

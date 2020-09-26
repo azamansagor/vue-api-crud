@@ -1,11 +1,39 @@
 <template>
-  <div class="w-100">
-    <h1>This is a add page</h1>
-    <ReusableForm
-      :schema="schema"
-      v-model="formData"
-      :fields = "fields"
-    ></ReusableForm>
+  <div class="w-100 mt-3">
+    <div class="col-md-8 m-auto">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                Add Data
+              </div>
+              <div class="card-body">
+
+                <div v-for="message in messages" class="alert alert-warning alert-dismissible fade show" role="alert">
+                  {{ message }}
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+
+                <form @submit.prevent="submitForm">
+                  <ReusableForm
+                      v-model="formData"
+                      :fields="fields"
+                  ></ReusableForm>
+
+                  <button type="submit" class="btn btn-primary mt-2" >Submit</button>
+                </form>
+              </div>
+              <div class="card-footer">
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -19,31 +47,9 @@ export default {
   data() {
     return {
       formData: {
-        firstName: "Evan"
       },
-      schema: [
-        {
-          type: "select",
-          name: "title",
-          multi: false,
-          label: "Title",
-          options: ["", "Mr", "Ms", "Mx", "Dr", "Madam", "Lord"]
-        },
-        {
-          type: "text",
-          placeholder: "First Name",
-          label: "First Name",
-          name: "firstName"
-        },
-        {
-          type: "number",
-          placeholder: "Age",
-          name: "age",
-          label: "Age",
-          minValue: 0
-        }
-      ],
-      fields: []
+      fields: [],
+      messages: []
     };
   },
   methods: {
@@ -52,7 +58,41 @@ export default {
           .then( response =>  {
             this.fields = response.data.data.fields[0];
           }).catch(error => {
-            console.log(error)
+            this.messages = ["Something went wrong. Try again"]
+          }
+      );
+    },
+    //submit form data to the server
+    submitForm(){
+      axios.post(
+          `${this.$API_URL}/submit_form.php`,
+          { formData: this.formData},
+          {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            },
+          })
+          .then( response =>  {
+            // Show errors on the top of the form
+            this.messages = response.data.messages;
+
+            // Alert status
+            this.$swal.fire({
+              position: 'top-end',
+              icon: response.data.status == 'success' ? 'success' : 'error',
+              title: response.data.status == 'success' ? 'Data added Successfully' : 'Something went wrong. Kindly submit again',
+              showConfirmButton: false,
+              timer: 1500,
+              toast: true
+            });
+
+            if(response.data.status == "success"){
+              this.$router.push({name: 'home'});
+            }
+
+          }).catch(error => {
+            console.log(error);
+            this.messages = error.data.messages;
           }
       );
     }
