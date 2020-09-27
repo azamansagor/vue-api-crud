@@ -20,7 +20,12 @@
             ></ReusableForm>
         </div>
         <div class="card-footer text-center">
-          <button type="submit" class="btn btn-primary btn-lg mt-2" >Submit</button>
+          <button type="submit" class="btn btn-primary btn-lg mt-2"  :class="{ 'disabled' : loading}">
+            Submit
+            <span v-if="loading">
+              <img src="../assets/images/spinner.svg" alt="Loading" width="14px">
+            </span>
+          </button>
         </div>
         </form>
       </div>
@@ -40,7 +45,8 @@ export default {
       formData: {
       },
       fields: [],
-      messages: []
+      messages: [],
+      loading: false
     };
   },
   methods: {
@@ -57,6 +63,7 @@ export default {
 
     //submit form data to the server
     submitForm(){
+      this.loading = true;
       axios.post(
           `${this.$API_URL}/submit_form.php`,
           { formData: this.formData},
@@ -78,6 +85,11 @@ export default {
               timer: 1500,
               toast: true
             });
+
+            setTimeout(()=> {
+              this.loading = false;
+            }, 3000)
+
           }).catch(error => {
             console.log(error);
             this.messages = error.data.messages;
