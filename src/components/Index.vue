@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>{{ msg }}</h1>
-    <h3 v-if="loading">Loading</h3>
+    <Preloader v-if="loading"></Preloader>
 
     <input type="text" class="form-control mb-2" v-model="searchText" placeholder="Search Here">
     <table class="table table-bordered">
@@ -16,9 +16,9 @@
               v-for="(column , key) in header"
               @click="column.sortable ? sort(key): null "
           >
-            {{ column.title }} - {{ column.hidden}}
+            {{ column.title }}
             <!-- show sortable icon if allowed -->
-            <span>
+            <span v-if="column.sortable">
               <!-- conditional sort up/down icons -->
               <img v-if="(key===currentSort && currentSortDir == 'asc')" src="../assets/images/up.svg" height="15px">
               <img v-else src="../assets/images/down.svg" height="15px">
@@ -57,6 +57,7 @@
 
 <script>
 import draggable from 'vuedraggable';
+import Preloader from "@/components/Preloader";
 
 export default {
   name: 'Index',
@@ -64,6 +65,7 @@ export default {
     msg: String
   },
   components: {
+    Preloader,
     draggable
   },
   data(){
@@ -74,7 +76,6 @@ export default {
       //api data
       headers: [],
       rows: [],
-      formattedHeaders: [],
 
       //sorting properties
       currentSort: 'id',
@@ -91,6 +92,7 @@ export default {
           .then( response =>  {
             this.headers = response.data.data.headers;
             this.rows = response.data.data.rows;
+
             this.loading = false;
           }).catch(error => {
             console.log(error)
@@ -159,6 +161,7 @@ export default {
     this.getList();
   },
   computed:{
+    // filter row based on search box text
     filteredRows: function(){
       let filteredRowData = [];
       if(this.searchText == ""){
@@ -168,51 +171,27 @@ export default {
           Object.keys(row).map( (key) => {
             this.headers.map( (header) => {
               Object.keys(header).map( (single) => {
-                // console.log(single);
-                // console.log(header[single].searchable);
                 if(key===single && header[single].searchable){
-                  // console.log(row[key]);
-                  if(row[key].toString().toLowerCase().match(this.searchText.toLowerCase().toLowerCase())){
+                  if(
+                      row[key].toString().toLowerCase().match(this.searchText.toLowerCase().toLowerCase()) &&
+                      row[key].toString().toLowerCase().startsWith(this.searchText.toLowerCase().toLowerCase())
+                  ){
                     filteredRowData.push(row);
                   }
                 }
               });
             });
-            // console.log(key);
-            // if(key.toString().toLowerCase().match(this.searchText.toLowerCase().toLowerCase())){
-            //   filteredRowData.push(row);
-            // }
-
           });
         });
-
       }
 
       return filteredRowData;
-      // return this.rows.filter( (row) => {
-      //   if(this.searchText == ""){
-      //     return row;
-      //   }else{
-      //     // return  Object.values(row).filter( (single ) => {
-      //     //   console.log(single);
-      //     //   return single.toString().toLowerCase().match(this.searchText.toString().toLowerCase());
-      //     // } );
-      //     Object.keys(row).filter( (key) => {
-      //       // console.log(key);
-      //       console.log(row);
-      //       return row[key].toString().toLowerCase().match(this.searchText.toLowerCase().toLowerCase());
-      //     });
-      //
-      //     // return row.name.toLowerCase().match(this.searchText.toLowerCase());
-      //   }
-      //
-      // });
     }
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+<!-- CSS for table hover and placeholder design -->
 <style scoped>
 .table-row:hover{
   background: #e4e4e4;

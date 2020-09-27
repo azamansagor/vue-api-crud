@@ -44,6 +44,7 @@ export default {
     };
   },
   methods: {
+    //get form fields data from server
     getFormData(){
       axios.get(`${this.$API_URL}/get_form.php`)
           .then( response =>  {
@@ -53,6 +54,7 @@ export default {
           }
       );
     },
+
     //submit form data to the server
     submitForm(){
       axios.post(

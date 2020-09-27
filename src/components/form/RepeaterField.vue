@@ -107,6 +107,7 @@ export default {
         required: false,
         validate: ''
       },
+      repeater_fields: this.repeater_fields || {},
 
       formData: this.inputValue || {}
     }

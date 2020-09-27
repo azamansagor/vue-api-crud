@@ -31,10 +31,11 @@
 <script>
 import Form from "@/components/form/ReusableForm";
 import ReusableForm from "@/components/form/ReusableForm";
+import Preloader from "@/components/Preloader";
 
 export default {
   name: "Update",
-  components: {ReusableForm, Form },
+  components: {Preloader, ReusableForm, Form },
   data() {
     return {
       formData: {

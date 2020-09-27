@@ -1,6 +1,6 @@
 <template>
   <div class="w-100">
-    <Index msg="Welcome to Your Vue.js App"/>
+    <Index msg="Vue API Crud App"/>
   </div>
 </template>
 

@@ -20,6 +20,7 @@ window.axios = require('axios');
 
 Vue.config.productionTip = false;
 
+
 //api base path
 Vue.prototype.$API_URL = "http://localhost/api";
 
