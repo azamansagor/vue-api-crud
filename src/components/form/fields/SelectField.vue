@@ -1,6 +1,8 @@
 <template>
   <div>
-    <label :for="name">{{title}}</label>
+    <h6>
+      <label :for="name">{{title}}</label>
+    </h6>
 
     <ValidationProvider :rules="validate" v-slot="{ errors }">
       <select
@@ -17,7 +19,7 @@
           <option v-bind:value="option.key" v-bind:selected="option.key == inputValue">{{ option.label }}</option>
         </template>
       </select>
-      <span v-for="error in errors">{{ errors[0] }}</span>
+      <small v-for="error in errors" class="form-text text-danger"> {{ errors[0] }} </small>
     </ValidationProvider>
 
   </div>

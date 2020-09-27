@@ -1,6 +1,9 @@
 <template>
   <div>
-    <label :for="name">{{title}}</label>
+    <h6>
+      <label :for="name">{{title}}</label>
+    </h6>
+
     <ValidationProvider :rules="validate" v-slot="{ errors }">
       <template v-for="option in options">
 
@@ -16,7 +19,7 @@
               @change="$emit('input',inputValue)"
               v-bind="html_attr"
               :value="option.key"
-              :checked="option.key == inputValue"
+              :checked="option.key === inputValue"
           >
 
           <label class="form-check-label" :for="option.key">
@@ -24,7 +27,7 @@
           </label>
         </div>
       </template>
-      <span v-for="error in errors">{{ errors[0] }}</span>
+      <small v-for="error in errors" class="form-text text-danger"> {{ errors[0] }} </small>
     </ValidationProvider>
 
   </div>

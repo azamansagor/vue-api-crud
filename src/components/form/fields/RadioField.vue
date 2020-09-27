@@ -1,6 +1,9 @@
 <template>
   <div>
-    <label :for="name">{{title}}</label>
+    <h6>
+      <label :for="name">{{title}}</label>
+    </h6>
+
     <ValidationProvider :rules="validate" v-slot="{ errors }">
       <template v-for="option in options">
 
@@ -24,7 +27,7 @@
           </label>
         </div>
       </template>
-      <span v-for="error in errors">{{ errors[0] }}</span>
+      <small v-for="error in errors" class="form-text text-danger"> {{ errors[0] }} </small>
     </ValidationProvider>
 
   </div>

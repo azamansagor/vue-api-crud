@@ -1,6 +1,8 @@
 <template>
   <div>
-    <label :for="name">{{title}}</label>
+    <h6>
+      <label :for="name">{{title}}</label>
+    </h6>
 
     <div class="border border-gray p-4">
       <component v-for="(field, key, index) in repeater_fields"

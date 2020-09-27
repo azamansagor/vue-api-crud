@@ -1,6 +1,8 @@
 <template>
   <div>
-    <label :for="name">{{title}}</label>
+    <h6>
+      <label :for="name">{{title}}</label>
+    </h6>
 
     <ValidationProvider :rules="validate" v-slot="{ errors }">
       <textarea type="text"
@@ -13,7 +15,7 @@
              @input="$emit('input',inputValue)"
              v-bind="html_attr"
       ></textarea>
-      <span v-for="error in errors">{{ errors[0] }}</span>
+      <small v-for="error in errors" class="form-text text-danger"> {{ errors[0] }} </small>
     </ValidationProvider>
   </div>
 </template>

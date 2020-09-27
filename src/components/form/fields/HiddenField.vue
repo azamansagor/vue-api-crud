@@ -11,7 +11,6 @@
              @input="$emit('input',inputValue)"
              v-bind="html_attr"
       >
-      <span v-for="error in errors">{{ errors[0] }}</span>
     </ValidationProvider>
   </div>
 </template>

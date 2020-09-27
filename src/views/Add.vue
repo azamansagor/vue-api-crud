@@ -1,37 +1,28 @@
 <template>
   <div class="w-100 mt-3">
     <div class="col-md-8 m-auto">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card">
-              <div class="card-header">
-                Add Data
-              </div>
-              <div class="card-body">
-
-                <div v-for="message in messages" class="alert alert-warning alert-dismissible fade show" role="alert">
-                  {{ message }}
-                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-
-                <form @submit.prevent="submitForm">
-                  <ReusableForm
-                      v-model="formData"
-                      :fields="fields"
-                  ></ReusableForm>
-
-                  <button type="submit" class="btn btn-primary mt-2" >Submit</button>
-                </form>
-              </div>
-              <div class="card-footer">
-
-              </div>
-            </div>
-          </div>
+      <div class="card">
+        <div class="card-header">
+          Add Data
         </div>
+        <form @submit.prevent="submitForm">
+        <div class="card-body">
+          <div v-for="message in messages" class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+            <ReusableForm
+                v-model="formData"
+                :fields="fields"
+            ></ReusableForm>
+        </div>
+        <div class="card-footer text-center">
+          <button type="submit" class="btn btn-primary btn-lg mt-2" >Submit</button>
+        </div>
+        </form>
       </div>
     </div>
   </div>
@@ -85,11 +76,6 @@ export default {
               timer: 1500,
               toast: true
             });
-
-            if(response.data.status == "success"){
-              this.$router.push({name: 'home'});
-            }
-
           }).catch(error => {
             console.log(error);
             this.messages = error.data.messages;
