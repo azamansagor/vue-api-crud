@@ -10,6 +10,7 @@
             :key="header.index"
             v-for="header in headers"
         >
+          <th>Action</th>
           <th
               :key="column.index"
               v-for="(column , key) in header"
@@ -38,6 +39,9 @@
             v-for="row in filteredRows"
             class="table-row"
         >
+          <th>
+            <router-link :to="{ name: 'update', params: {id: row.id } }" class="btn btn-primary btn-sm">Edit</router-link>
+          </th>
           <td
               :key="single.index"
               v-for="single in formattedRows(row)"

@@ -17,8 +17,9 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '@/views/Add')
   },
   {
-    path: '/update',
+    path: '/update/:id',
     name: 'update',
+    props: true,
     component: () => import(/* webpackChunkName: "about" */ '@/views/Update')
   }
 ]
