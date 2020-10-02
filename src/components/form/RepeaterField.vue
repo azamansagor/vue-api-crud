@@ -5,7 +5,7 @@
     </h6>
 
     <div class="border border-gray p-4">
-      <component v-for="(field, key, index) in repeater_fields"
+      <component v-for="(field, key, index) in new_repeater_fields"
                  :name="key"
                  :key="index"
                  :is="modifyType(field.type)"
@@ -48,11 +48,9 @@
                         <label for="type">Input Type</label>
                         <select name="type" id="type" class="form-control" v-model="newFields.type">
                           <option value="" disabled>Select input type</option>
-                          <option value="text">Text</option>
-                          <option value="number">Number</option>
-                          <option value="email">Email</option>
-                          <option value="repeater">Repeater</option>
-                          <option value="textarea">Textarea</option>
+                          <template v-for="(inputType, key) in formInputTypes">
+                            <option :value="key">{{  inputType }}</option>
+                          </template>
                         </select>
                       </div>
                     </div>
@@ -107,9 +105,16 @@ export default {
         required: false,
         validate: ''
       },
-      repeater_fields: this.repeater_fields || {},
+      new_repeater_fields: this.repeater_fields !== 'undefined' ? this.repeater_fields:  {},
 
-      formData: this.inputValue || {}
+      formData: this.inputValue || {},
+      formInputTypes: {
+        text: 'Text',
+        number: 'Number',
+        email: 'Email',
+        textarea: 'Textarea',
+        repeater: 'Repeater'
+      }
     }
   },
   props: [
@@ -128,10 +133,21 @@ export default {
     addRow(){
       let newObj = {}
       newObj[this.newFieldKey] = this.newFields;
-      Object.assign(this.repeater_fields, newObj);
+      Object.assign(this.new_repeater_fields, newObj);
+      this.newFieldKey =  '',
+      this.newFields =  {
+        title: '',
+        type: '',
+        required: false,
+        validate: ''
+      },
       this.showModal = false;
     }
   },
+
+  mounted() {
+    this.$emit('input', this.value);
+  }
 
 
 }

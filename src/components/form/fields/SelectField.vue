@@ -38,5 +38,8 @@ export default {
     'name', 'title', 'type', 'required', 'value',
     'validate', 'html_attr', 'options', 'default'
   ],
+  mounted() {
+    this.$emit('input', this.value);
+  }
 }
 </script>

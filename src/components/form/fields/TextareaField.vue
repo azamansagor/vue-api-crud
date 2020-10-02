@@ -31,5 +31,8 @@ export default {
   props: [
     'name', 'title', 'type', 'required', 'value', 'validate', 'html_attr'
   ],
+  mounted() {
+    this.$emit('input', this.value);
+  }
 }
 </script>
