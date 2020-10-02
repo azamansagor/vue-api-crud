@@ -19,7 +19,7 @@
               @change="$emit('input',inputValue)"
               v-bind="html_attr"
               :value="option.key"
-              :checked="option.key === inputValue"
+              :checked="option.key == inputValue"
           >
 
           <label class="form-check-label" :for="option.key">
@@ -47,7 +47,7 @@ export default {
     'validate', 'html_attr', 'options', 'default'
   ],
   mounted() {
-    this.$emit('input', this.value);
+    this.$emit('input', this.input);
   }
 }
 </script>
