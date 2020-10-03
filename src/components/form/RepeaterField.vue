@@ -105,15 +105,15 @@ export default {
         required: false,
         validate: ''
       },
-      new_repeater_fields: this.repeater_fields !== 'undefined' ? this.repeater_fields:  {},
+      // new_repeater_fields: (this.repeater_fields == 'undefined') ? {} : this.repeater_fields,
+      new_repeater_fields: (typeof this.repeater_fields == "undefined") ? {} : this.repeater_fields,
 
       formData: this.inputValue || {},
       formInputTypes: {
         text: 'Text',
         number: 'Number',
         email: 'Email',
-        textarea: 'Textarea',
-        repeater: 'Repeater'
+        textarea: 'Textarea'
       }
     }
   },
@@ -131,7 +131,7 @@ export default {
       return fieldType.charAt(0).toUpperCase() + fieldType.slice(1).toLowerCase() + 'Field';
     },
     addRow(){
-      let newObj = {}
+      let newObj = {};
       newObj[this.newFieldKey] = this.newFields;
       Object.assign(this.new_repeater_fields, newObj);
       this.newFieldKey =  '',
