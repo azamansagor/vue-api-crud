@@ -55,6 +55,9 @@
         </tr>
       </draggable>
     </table>
+    <div v-if="filteredRows.length == 0" class="text-center border p-3">
+      No Data Available
+    </div>
   </div>
 </template>
 
