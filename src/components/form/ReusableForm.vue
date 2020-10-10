@@ -28,7 +28,7 @@ export default {
       this.$set(this.formData, fieldName, value);
       this.$emit("input", this.formData);
     },
-    //modify the form fields as 'text' to "TextField" as it's conflicting with html fild type
+    //modify the form fields as 'text' to "TextField" as it's conflicting with html field type
     modifyType(fieldType){
       return fieldType.charAt(0).toUpperCase() + fieldType.slice(1).toLowerCase() + 'Field';
     }

@@ -2,9 +2,8 @@
   <div class="w-100 mt-3">
     <div class="col-md-8 m-auto">
       <div class="card">
-        <div class="card-header">
-          Update Data
-        </div>
+        <div class="card-header"> Update Data </div>
+
         <form @submit.prevent="submitForm">
           <div class="card-body">
             <div v-for="message in messages" class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -29,19 +28,18 @@
 </template>
 
 <script>
-import Form from "@/components/form/ReusableForm";
 import ReusableForm from "@/components/form/ReusableForm";
 import Preloader from "@/components/Preloader";
 
 export default {
   name: "Update",
-  components: {Preloader, ReusableForm, Form },
+  components: {Preloader, ReusableForm },
   data() {
     return {
-      formData: {
-      },
-      fields: [],
-      messages: []
+      formData: {}, //form submission data list
+      fields: [], //form fields from API call
+      messages: [], //Error Messages
+      loading: false, //loading status
     };
   },
   props: ['id'],
@@ -78,9 +76,24 @@ export default {
               timer: 1500,
               toast: true
             });
+
+            //Submit button spinner loading status
+            setTimeout(()=> {
+              this.loading = false;
+            }, 1000)
+
           }).catch(error => {
-            console.log(error);
             this.messages = error.data.messages;
+
+            // Alert status
+            this.$swal.fire({
+              position: 'top-end',
+              icon: 'error',
+              title: 'Something went wrong. Kindly submit again',
+              showConfirmButton: false,
+              timer: 1500,
+              toast: true
+            });
           }
       );
     }

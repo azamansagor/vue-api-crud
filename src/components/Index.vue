@@ -1,9 +1,12 @@
 <template>
   <div>
-    <h1>{{ msg }}</h1>
     <Preloader v-if="loading"></Preloader>
+    <h1>{{ msg }}</h1>
 
+    <!-- Search input field -->
     <input type="text" class="form-control mb-2" v-model="searchText" placeholder="Search Here">
+
+    <!-- List Table -->
     <table class="table table-bordered">
       <thead>
         <tr
@@ -39,6 +42,7 @@
             v-for="row in filteredRows"
             class="table-row"
         >
+          <!-- Edit column -->
           <th>
             <router-link :to="{ name: 'update', params: {id: row.id } }" class="btn btn-primary btn-sm">Edit</router-link>
           </th>
@@ -51,7 +55,6 @@
         </tr>
       </draggable>
     </table>
-
   </div>
 </template>
 
@@ -109,6 +112,7 @@ export default {
       headerKeys.forEach(header => {
         rowKeys.forEach(singleRow => {
           if (row.hasOwnProperty(header)) {
+            // header column based row column show
             if (header === singleRow) {
               newRow[header] = row[singleRow];
             }
@@ -147,9 +151,25 @@ export default {
             },
           })
           .then( response =>  {
-            console.log(response);
+            // Alert status
+            this.$swal.fire({
+              position: 'top-end',
+              icon: response.data.status == 'success' ? 'success' : 'error',
+              title: response.data.status == 'success' ? 'Data Order Successful' : 'Something Went Wrong. Drag Again',
+              showConfirmButton: false,
+              timer: 1500,
+              toast: true
+            });
           }).catch(error => {
-            console.log(error)
+            // Alert status
+            this.$swal.fire({
+              position: 'top-end',
+              icon: 'error',
+              title: 'Something went wrong. Drag again',
+              showConfirmButton: false,
+              timer: 1500,
+              toast: true
+            });
           }
       );
     },

@@ -5,7 +5,7 @@ Install required packages
 ```
 npm install
 ```
-Set API base URL in main.js file
+Set API base URL inside src/main.js file
 ```
 //api base path
 Vue.prototype.$API_URL = "http://localhost/api";
@@ -15,14 +15,29 @@ Vue.prototype.$API_URL = "http://localhost/api";
 ```
 npm run serve
 ```
-
-
-### Response Type
-* Add form response status should be "success" , "error"
-
+### Component Tree
+```
+App.vue
+|__Home.vue
+|  |__Index.vue
+|__Add
+|  |__src/components/form
+|     |__ReusableForm.vue
+|        |__ fields/index.js as FormFields
+|        |__ RepeaterField.vue
+|__Update
+|  |__src/components/form
+|     |__ReusableForm.vue
+|        |__ fields/index.js as FormFields
+|        |__ RepeaterField.vue
+|__src/components/Preloader.vue as Preloader
+```
+### Notes
+* Form response status should be "success" or "error"
+* Search string matches from the starting of the string
 
 ### API Form Input Values Example
-Checkbox 
+Checkbox with default values
 ```
 "checkbox_example":  {
   "title": "Checkbox Title",

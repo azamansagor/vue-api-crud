@@ -16,7 +16,7 @@
       <button @click.prevent="showModal = true" class="btn btn-secondary">Add New</button>
     </div>
 
-    <!-- bootstrap modal -->
+    <!-- bootstrap modal for repeater field properties -->
     <transition name="modal" v-if="showModal">
       <div class="modal-mask">
         <div class="modal-wrapper">
@@ -34,13 +34,14 @@
                     <div class="col-md-6">
                       <div class="form-group">
                         <label for="field_key">Field Key</label>
-                        <input type="text" class="form-control" id="field_key" v-model="newFieldKey">
+                        <input type="text" class="form-control" id="field_key" v-model="newFieldKey" placeholder="Only lower case text and underscore">
+                        <small class="form-text text-muted">Example: title_text</small>
                       </div>
                     </div>
                     <div class="col-md-6">
                       <div class="form-group">
                         <label for="title">Title</label>
-                        <input type="text" class="form-control" id="title" v-model="newFields.title">
+                        <input type="text" class="form-control" id="title" v-model="newFields.title" placeholder="Field Title Text">
                       </div>
                     </div>
                     <div class="col-md-6">
@@ -56,6 +57,13 @@
                     </div>
                     <div class="col-md-6">
                       <div class="form-group">
+                        <label for="validate">Validation Rules</label><br>
+                        <input type="text" class="form-control" id="validate" v-model="newFields.validate">
+                        <small class="form-text text-muted">Separate rules with pipe | character e.g. only_letter_number|max:100</small>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
                         <label for="type">Required</label><br>
                         <div class="btn-group btn-group-toggle" data-toggle="buttons">
                           <label class="btn btn-secondary" :class="[newFields.required? 'active' : '']">
@@ -65,13 +73,6 @@
                             <span @click.prevent="newFields.required = false">No</span>
                           </label>
                         </div>
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label for="validate">Validation Rules</label><br>
-                        <input type="text" class="form-control" id="validate" v-model="newFields.validate">
-                        <small class="form-text text-muted">Separate rules with pipe | character e.g. only_letter_number|max:100</small>
                       </div>
                     </div>
                   </div>
@@ -105,7 +106,6 @@ export default {
         required: false,
         validate: ''
       },
-      // new_repeater_fields: (this.repeater_fields == 'undefined') ? {} : this.repeater_fields,
       new_repeater_fields: (typeof this.repeater_fields == "undefined") ? {} : this.repeater_fields,
 
       formData: this.inputValue || {},
@@ -113,7 +113,7 @@ export default {
         text: 'Text',
         number: 'Number',
         email: 'Email',
-        textarea: 'Textarea'
+        textarea: 'Textarea',
       }
     }
   },

@@ -11,12 +11,28 @@
           </button>
           <div class="collapse navbar-collapse" id="collapsibleNavId">
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-              <li class="nav-item">
-                <router-link to="/" class="nav-link">Home</router-link>
-              </li>
-              <li class="nav-item">
-                <router-link to="/add" class="nav-link">Add</router-link>
-              </li>
+              <router-link
+                  :to="{ name: 'home'}"
+                  v-slot="{ href, route, navigate, isActive, isExactActive }"
+              >
+                <li
+                    class="nav-item"
+                    :class="[isActive && 'router-link-active', isExactActive && 'router-link-exact-active']"
+                >
+                  <a :href="href" class="nav-link" @click="navigate" exact>Home</a>
+                </li>
+              </router-link>
+              <router-link
+                  :to="{ name: 'add'}"
+                  v-slot="{ href, route, navigate, isActive, isExactActive }"
+              >
+                <li
+                    class="nav-item"
+                    :class="[isActive && 'router-link-active', isExactActive && 'router-link-exact-active']"
+                >
+                  <a :href="href" class="nav-link" @click="navigate">Add</a>
+                </li>
+              </router-link>
             </ul>
           </div>
         </nav>
@@ -33,6 +49,7 @@
 
 
 <style>
+/* Preloader animation style */
 .loader-overlay {
   position: fixed;
   width: 100%;
@@ -71,7 +88,6 @@ span.text {
    width: 80px;
    position: absolute;
  }
-
 @keyframes loader-animate {
   0% {
     transform: rotate(0deg)
