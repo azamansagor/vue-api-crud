@@ -10,7 +10,9 @@
                  :key="index"
                  :is="modifyType(field.type)"
                  @input="updateForm(key, $event)"
+                 @remove="removeRow(key, $event)"
                  v-bind="field"
+                 :repeater="true"
       >
       </component>
       <button @click.prevent="showModal = true" class="btn btn-secondary">Add New</button>
@@ -92,6 +94,7 @@
 </template>
 <script>
 import FormFields from '@/components/form/fields';
+import Vue from 'vue'
 
 export default {
   name: 'RepeaterField',
@@ -142,12 +145,18 @@ export default {
         validate: ''
       },
       this.showModal = false;
+    },
+    //remove a repeater field
+    removeRow(value){
+      if(this.new_repeater_fields.hasOwnProperty(value)){
+        Vue.delete(this.new_repeater_fields, value)
+      }
     }
   },
 
   mounted() {
     this.$emit('input', this.value);
-  }
+  },
 
 
 }

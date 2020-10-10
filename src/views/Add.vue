@@ -87,7 +87,9 @@ export default {
             //Submit button spinner loading status
             setTimeout(()=> {
               this.loading = false;
-            }, 1000)
+            }, 1000);
+
+            // this.$router.go(this.$router.currentRoute)
 
           }).catch(error => {
             this.messages = error.data.messages;

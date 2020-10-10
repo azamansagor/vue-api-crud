@@ -17,7 +17,6 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 //enable axios globally
 window.axios = require('axios');
 
-
 Vue.config.productionTip = false;
 
 
